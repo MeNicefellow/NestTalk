@@ -1,0 +1,4 @@
+ip_address: '127.0.0.1'  # Localhost; adjust as needed for deployment
+port: 6000               # Port number for the Flask app
+database_path: 'app.db'  # Path to the SQLite database file
+user_key: 'secret_key'   # Key to check for authorized user registration
