@@ -47,7 +47,7 @@ NestTalk is a communication tool designed to keep families and close friend circ
 ## Usage
 
 - **Register/Login**: Start the client application and follow the prompts to either register a new user or log in with existing credentials.
-- **Send Messages**: Once logged in, choose from the list of online users and start chatting.
+-  **Send Messages**: Once logged in, choose from the list of online users and start chatting.
 - **Logout**: Ensure to logout properly to set your status to offline.
 
 ## License

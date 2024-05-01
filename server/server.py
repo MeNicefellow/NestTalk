@@ -4,6 +4,8 @@ from flask_socketio import SocketIO, join_room, leave_room, emit
 from flask_sqlalchemy import SQLAlchemy
 import yaml
 
+
+
 def load_config():
     # Get the directory of the current script
     script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -27,6 +29,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
+
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender = db.Column(db.String(80), nullable=False)
+    recipient = db.Column(db.String(80), nullable=False)
+    content = db.Column(db.String(500), nullable=False)
+
 # Database models
 # Database models
 class User(db.Model):
@@ -39,10 +49,10 @@ class User(db.Model):
     def __repr__(self):
         return f'<User {self.username}>'
 
-# Ensure database is created within the application context
-with app.app_context():
-    db.create_all()
 
+def create_tables():
+    with app.app_context():
+        db.create_all()
 # When client connects, automatically add them to a room with their username
 @socketio.on('connect')
 def handle_connect():
@@ -78,6 +88,11 @@ def handle_send_message(data):
     sender_username = users.get(sender_sid, "Unknown User")
     print(f"[DEBUG] Sending message from {sender_username} to {recipient}: {message}")
     emit('receive_message', {'message': message, 'from': sender_username}, room=recipient)
+
+    # Save the message to the database
+    new_message = Message(sender=sender_username, recipient=recipient, content=message)
+    db.session.add(new_message)
+    db.session.commit()
 
 
 
@@ -136,4 +151,5 @@ def handle_message(data):
 # Routes and socket events will be added here
 
 if __name__ == '__main__':
+    create_tables()
     socketio.run(app, host=config['ip_address'], port=config['port'])
