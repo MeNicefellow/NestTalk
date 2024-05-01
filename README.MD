@@ -54,6 +54,13 @@ NestTalk is a communication tool designed to keep families and close friend circ
 
 This project is licensed under the terms of the Apache 2.0 License.
 
+## Disclaimer
+
+Use of NestTalk is at your own risk. While we strive to provide a secure and reliable platform, we cannot guarantee absolute security. Please be mindful of the information you share and with whom you share it. We are not responsible for any damages or losses related to the use of our software.
+
+
+You can add this section wherever you think it fits best in your `README.MD` file.
+
 ## Discord Server
 
 Join our Discord server [here](https://discord.gg/xhcBDEM3).
