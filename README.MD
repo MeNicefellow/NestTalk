@@ -69,5 +69,5 @@ Join our Discord server [here](https://discord.gg/xhcBDEM3).
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-eeling Generous? 😊
+## Feeling Generous? 😊
 Eager to buy me a cup of 2$ coffe or iced tea?🍵☕ Sure, here is the link: [https://ko-fi.com/drnicefellow](https://ko-fi.com/drnicefellow). Please add a note on which one you want me to drink?

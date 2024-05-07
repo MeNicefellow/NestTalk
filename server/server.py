@@ -87,8 +87,13 @@ def handle_send_message(data):
     sender_sid = request.sid
     sender_username = users.get(sender_sid, "Unknown User")
     print(f"[DEBUG] Sending message from {sender_username} to {recipient}: {message}")
-    emit('receive_message', {'message': message, 'from': sender_username}, room=recipient)
-
+    #emit('receive_message', {'message': message, 'from': sender_username}, room=recipient)
+    if recipient == "all":
+        # Broadcast the message to all connected clients
+        emit('receive_message', {'from': sender_username, 'message': message}, broadcast=True)
+    else:
+        # Send the message to the specific recipient
+        emit('receive_message', {'from': sender_username, 'message': message}, room=recipient)
     # Save the message to the database
     new_message = Message(sender=sender_username, recipient=recipient, content=message)
     db.session.add(new_message)

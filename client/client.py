@@ -13,11 +13,6 @@ colors = ["green", "yellow", "blue", "magenta", "cyan", "white"]
 # Define a dictionary to store sender-color pairs
 sender_colors = {}
 
-app = typer.Typer()# Configure logging
-logging.basicConfig(level=logging.ERROR)  # Set higher logging level to suppress INFO and DEBUG messages
-
-app = typer.Typer()
-sio = socketio.Client(logger=False, engineio_logger=False)  # Now logging is filtered by the global logging level
 def load_config():
     # Get the directory of the current script
     script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -30,12 +25,9 @@ def load_config():
 
     return config
 
+app = typer.Typer()# Configure logging
 
-config = load_config()
-
-# Server URL for HTTP requests
-SERVER_URL = f"http://{config['server_ip']}:{config['server_port']}"
-
+sio = socketio.Client(logger=False, engineio_logger=False)  # Now logging is filtered by the global logging level
 
 @sio.event
 def connect():
@@ -92,24 +84,21 @@ def start():
     current_recipient = None
     try:
         while True:
-
-            #users, usernames = get_users()
-
-            # If no recipient is selected yet, select one
             if not current_recipient:
                 users, usernames = get_users()
+                usernames.append("all")  # Add "all" option to the list of recipients
                 current_recipient = inquirer.select(
-                    message="Choose the username of the recipient",
+                    message="Choose the username of the recipient or select 'all' to send to all users",
                     choices=usernames,
                 ).execute()
 
             message = typer.prompt("Enter your message")
 
-            # Check if the message is a command to change the recipient
             if message == "/chg":
                 users, usernames = get_users()
+                usernames.append("all")  # Add "all" option to the list of recipients
                 current_recipient = inquirer.select(
-                    message="Choose the username of the recipient",
+                    message="Choose the username of the recipient or select 'all' to send to all users",
                     choices=usernames,
                 ).execute()
                 message = typer.prompt("Enter your message")
@@ -140,4 +129,10 @@ def register():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.ERROR)  # Set higher logging level to suppress INFO and DEBUG messages
+
+    config = load_config()
+
+    # Server URL for HTTP requests
+    SERVER_URL = f"http://{config['server_ip']}:{config['server_port']}"
     app()
